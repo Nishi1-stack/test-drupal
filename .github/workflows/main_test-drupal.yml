@@ -17,28 +17,29 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: actions/setup-php@v2
         with:
           php-version: '8.2'
 
       - name: Check if composer.json exists
         id: check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: 'composer.json'
+        run: test -f composer.json && echo '::set-output name=files_exists::true' ||
 
-      - name: Run composer install if composer.json exists
+      - name: Install Composer dependencies
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Archive Drupal application
+        run: |
+          mkdir drupal
+          mv * drupal/
+          zip -r drupal.zip drupal/
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v2
         with:
-          name: php-app
-          path: release.zip
+            name: drupal-app
+            path: drupal.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,7 +52,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: php-app
+          name: drupal-app
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
