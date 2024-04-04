@@ -37,7 +37,8 @@ jobs:
       - name: Archive Drupal application
         run: |
           mkdir drupal
-          mv * drupal/
+          shopt -s extglob  # Enable extended pattern matching
+          mv !(drupal) drupal/
           zip -r drupal.zip drupal/
 
       - name: Upload artifact for deployment
