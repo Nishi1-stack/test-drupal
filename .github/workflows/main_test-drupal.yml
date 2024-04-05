@@ -1,5 +1,5 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More GitHub Actions for Azure: https://github.com/Azure/action
 
 name: Build and deploy PHP app to Azure Web App - test-drupal
 
@@ -32,7 +32,9 @@ jobs:
       #   run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
       
       - name: Copy settings.php to Drupal root
-        run: cp DRUPAL-10.2.5/sites/default/settings.php .
+        run: |
+          cp DRUPAL-10.2.5/sites/default/settings.php .
+          cp DRUPAL-10.2.5/web/drupal/core/install.php .
 
       - name: Archive Drupal application
         run: |
