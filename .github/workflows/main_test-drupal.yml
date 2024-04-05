@@ -62,9 +62,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: php-app
-      - name: Move Drupal files to wwwroot
-        run: |
-            cp DRUPAL-10.2.5/web/drupal/core/install.php .
 
       - name: Unzip artifact for deployment
         run: unzip drupal.zip
