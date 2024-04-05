@@ -32,7 +32,9 @@ jobs:
       #   run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
       
       - name: Copy settings.php to Drupal root
-        run: cp DRUPAL-10.2.5/sites/default/settings.php .
+        run: |
+          cp DRUPAL-10.2.5/sites/default/settings.php .
+          cp DRUPAL-10.2.5/core/install.php /sites/wwwroot/
 
       - name: Archive Drupal application
         run: |
