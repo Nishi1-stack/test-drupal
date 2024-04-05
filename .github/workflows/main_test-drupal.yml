@@ -34,7 +34,7 @@ jobs:
       - name: Copy settings.php to Drupal root
         run: |
           cp DRUPAL-10.2.5/sites/default/settings.php .
-          cp DRUPAL-10.2.5/web/drupal/core/install.php .
+          cp drupal/install.php /home/site/wwwroot
 
       - name: Archive Drupal application
         run: |
