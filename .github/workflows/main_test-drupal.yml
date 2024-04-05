@@ -34,7 +34,7 @@ jobs:
       - name: Copy settings.php to Drupal root
         run: |
           cp DRUPAL-10.2.5/sites/default/settings.php .
-          cp DRUPAL-10.2.5/core/install.php /sites/wwwroot/
+          cp DRUPAL-10.2.5/core/install.php .
 
       - name: Archive Drupal application
         run: |
@@ -68,7 +68,7 @@ jobs:
           name: php-app
       - name: Move Drupal files to wwwroot
         run: |
-            cp /DRUPAL-10.2.5/core/install.php /sites/wwwroot/
+            cp DRUPAL-10.2.5/core/install.php .
 
       - name: Unzip artifact for deployment
         run: unzip drupal.zip
