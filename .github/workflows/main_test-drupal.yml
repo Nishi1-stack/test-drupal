@@ -1,5 +1,5 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More GitHub Actions for Azure: https://github.com/Azure/action
 
 name: Build and deploy PHP app to Azure Web App - test-drupal
 
@@ -41,6 +41,10 @@ jobs:
           mv !(drupal) drupal/
           zip -r drupal.zip drupal/
 
+      - name: Move Drupal files to wwwroot
+        run: |
+          cp /DRUPAL-10.2.5/core/install.php /sites/wwwroot/
+
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v2
         with:
@@ -60,6 +64,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: php-app
+      - name: Move Drupal files to wwwroot
+        run: |
+            cp /DRUPAL-10.2.5/core/install.php /sites/wwwroot/
 
       - name: Unzip artifact for deployment
         run: unzip drupal.zip
