@@ -1,0 +1,18 @@
+version: '2'
+services:
+  drupal:
+    image: 'docker.io/bitnami/drupal-nginx:8-debian-10'
+    ports:
+      - '80:8080'
+      - '443:8443'
+    environment:
+      - DRUPAL_DATABASE_HOST=test-drupal-server.mysql.database.azure.com
+      - DRUPAL_DATABASE_PORT_NUMBER=3306
+      - DRUPAL_DATABASE_USER=cludtsqufw
+      - DRUPAL_DATABASE_PASSWORD=S087UPWJ1F138K53$
+      - DRUPAL_DATABASE_NAME=test-drupal-database
+    volumes:
+      - 'test-drupal:/bitnami/drupal'
+volumes:
+  ${FILESHARE_NAME}:
+    external: true
