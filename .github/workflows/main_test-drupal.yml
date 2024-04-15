@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/action
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy PHP app to Azure Web App - test-drupal
 
 on:
   push:
     branches:
-      - '*'
+      - main
   workflow_dispatch:
 
 jobs:
@@ -27,28 +27,18 @@ jobs:
         with:
           files: 'composer.json'
 
-      # - name: Run composer install if composer.json exists
-      #   if: steps.check_files.outputs.files_exists == 'true'
-      #   run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
-      
-      - name: Copy settings.php to Drupal root
-        run: |
-          cp DRUPAL-10.2.5/sites/default/settings.php .
-          cp DRUPAL-10.2.5/web/drupal/core/install.php .
+      - name: Run composer install if composer.json exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
 
-      - name: Archive Drupal application
-        run: |
-          mkdir drupal
-          shopt -s extglob  # Enable extended pattern matching
-          mv !(drupal) drupal/
-          zip -r drupal.zip drupal/
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
-      - name: Upload artifact for deployment
-        uses: actions/upload-artifact@v2
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
           name: php-app
-          path: drupal.zip
-
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,7 +54,7 @@ jobs:
           name: php-app
 
       - name: Unzip artifact for deployment
-        run: unzip drupal.zip
+        run: unzip release.zip
       
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -72,5 +62,5 @@ jobs:
         with:
           app-name: 'test-drupal'
           slot-name: 'Production'
-          package: drupal.zip
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B3969C2AFB3F4D928A55085EA1F211FF }}
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6EB3DA4832E7453B809B03767E467D15 }}
